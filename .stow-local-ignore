@@ -6,3 +6,5 @@
 ^/COPYING
 
 .DS_Store
+
+tmux/plugins
