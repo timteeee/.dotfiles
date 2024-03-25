@@ -73,5 +73,5 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 export DISABLE_SPRING=true
 
-eval "$(starship init zsh)"
 eval "$(zoxide init zsh --cmd cd)"
+eval "$(starship init zsh)"
