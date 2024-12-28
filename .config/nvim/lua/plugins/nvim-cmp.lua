@@ -5,8 +5,10 @@ return {
     dependencies = {
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-buffer",
+        "hrsh7th/cmp-path",
         "L3MON4D3/LuaSnip", -- snippet engine
         "saadparwaiz1/cmp_luasnip", -- for autocompletion
+        "nvim-highlight-colors",
     },
     config = function()
         local cmp = require("cmp")
@@ -28,43 +30,29 @@ return {
                 ["<C-u>"] = cmp.mapping.scroll_docs(-4),
                 ["<C-d>"] = cmp.mapping.scroll_docs(4),
                 ["<C-y>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
-                ["<Tab>"] = cmp.mapping(function(fallback)
-                    if cmp.visible() then
-                        cmp.select_next_item()
-                    elseif luasnip.expand_or_locally_jumpable() then
-                        luasnip.expand_or_jump()
-                    else
-                        fallback()
-                    end
-                end, { "i", "s" }),
-                ["<S-Tab>"] = cmp.mapping(function(fallback)
-                    if cmp.visible() then
-                        cmp.select_prev_item()
-                    elseif luasnip.locally_jumpable(-1) then
-                        luasnip.jump(-1)
-                    else
-                        fallback()
-                    end
-                end, { "i", "s" }),
             }),
             sources = {
-                -- { name = "nvim_lsp" },
                 {
                     name = "nvim_lsp",
                     entry_filter = function(entry, _)
                         local kind = require("cmp.types.lsp").CompletionItemKind[entry:get_kind()]
-                        return kind ~= "Text"
+                        return kind ~= "Text" or kind ~= "Keyword"
                     end,
                 }, -- lsp
-                { name = "crates" }, -- rust crates
                 { name = "luasnip" }, -- snippets
+                { name = "crates" }, -- rust crates
+                { name = "path" },
+                { name = "buffer", keyword_length = 5 },
+            },
+            formatting = {
+                format = require("nvim-highlight-colors").format,
             },
         })
 
         cmp.setup.cmdline({ "/", "?" }, {
             mapping = cmp.mapping.preset.cmdline(),
             sources = {
-                { name = "buffer" },
+                { name = "buffer", keyword_length = 5 },
             },
         })
     end,
