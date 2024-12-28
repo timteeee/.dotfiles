@@ -2,7 +2,9 @@ return {
     "stevearc/conform.nvim",
     event = { "BufReadPre", "BufNewFile" },
     config = function()
-        require("conform").setup({
+        local conform = require("conform")
+
+        conform.setup({
             formatters_by_ft = {
                 lua = { "stylua" },
                 python = { "ruff_format" },
@@ -19,10 +21,30 @@ return {
                 markdown = { "prettier" },
             },
             -- These options will be passed to conform.format()
-            format_on_save = { timeout_ms = 500, async = false, lsp_fallback = true },
-            condition = function(_, ctx)
-                return vim.fs.basename(ctx.filename) ~= "README.md"
+            format_on_save = function(bufnr)
+                if vim.b[bufnr].disable_autofmt or vim.g.disable_autofmt then
+                    return
+                end
+
+                return { timeout_ms = 500, async = false, lsp_fallback = true }
             end,
+        })
+
+        vim.api.nvim_create_user_command("ToggleFmt", function(args)
+            if args.bang then
+                local disabled = not vim.g.disable_autofmt
+                vim.g.disable_autofmt = disabled
+                local status = disabled and "disabled" or "enabled"
+                vim.notify("Format on save " .. status .. " globally")
+            else
+                local disabled = not vim.b.disable_autofmt
+                vim.b.disable_autofmt = disabled
+                local status = disabled and "disabled" or "enabled"
+                vim.notify("Format on save " .. status .. " for current buffer")
+            end
+        end, {
+            desc = "Toggle format on save for current buffer. Call with ! to toggle globally.",
+            bang = true,
         })
 
         require("conform").formatters.rustfmt = {
