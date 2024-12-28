@@ -22,3 +22,6 @@ vim.keymap.set("n", "<leader>Y", [["+Y]])
 -- Quickfix list navigation
 vim.keymap.set("n", "[q", "<CMD>cprev<CR>", { desc = "Go to previous quickfix list entry" })
 vim.keymap.set("n", "]q", "<CMD>cnext<CR>", { desc = "Go to next quickfix list entry" })
+
+-- Disable "s" mapping to "cl"
+vim.keymap.set("n", "s", "<Nop>")
