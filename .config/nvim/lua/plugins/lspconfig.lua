@@ -51,20 +51,6 @@ return {
                 vim.keymap.set("n", "<leader>ih", function()
                     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
                 end, { desc = "Toggle LSP Inlay Hints" })
-
-                local filetype = vim.filetype.match({ buf = event.buf })
-
-                -- python specific keymaps
-                -- TODO: make a snippet
-                if filetype == "python" then
-                    vim.keymap.set("n", "<leader>nm", 'iif __name__ == "__main__":<CR>', { buffer = event.buf, desc = "if [N]ame == [M]ain" })
-                end
-
-                -- go specific keymaps
-                -- TODO: make a snippet
-                if filetype == "go" then
-                    vim.keymap.set("n", "<leader>he", "iif err != nil{<CR>", { buffer = event.buf, desc = "[H]andle [E]rror" })
-                end
             end,
         })
 
