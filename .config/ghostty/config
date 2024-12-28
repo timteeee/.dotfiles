@@ -3,13 +3,7 @@
 #		https://github.com/mitchellh/ghostty/blob/main/src/config/Config.zig   #
 ################################################################################
 
-theme = Dracula
-
-# Override values to match Dracula Soft
-background = "#292a35"
-
-# Override Bright Black value to match Bright Black value in Dracula Soft
-palette = 8=#7c7f8a
+theme = tmrw
 
 font-family = FiraCode Nerd Font
 font-synthetic-style = false
@@ -25,13 +19,10 @@ font-feature = cv10
 # center aligned '*'
 font-feature = cv16  
 
-font-size = 15
+font-size = 16
 
 adjust-cell-width = -5%
-adjust-cell-height = 20%
-
-macos-titlebar-style = tabs
-macos-option-as-alt = true
 
 mouse-hide-while-typing = true
 window-save-state = always
+window-padding-balance = true
