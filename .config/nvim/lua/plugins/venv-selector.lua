@@ -3,7 +3,7 @@ return {
     -- REQUIRED: `fd` must be installed on the system
     dependencies = {
         "neovim/nvim-lspconfig",
-        { "nvim-telescope/telescope.nvim", branch = "0.1.x", dependencies = { "nvim-lua/plenary.nvim" } },
+        "nvim-telescope/telescope.nvim",
         -- "mfussenegger/nvim-dap", "mfussenegger/nvim-dap-python", --optional, only for debugger support
     },
     lazy = false,

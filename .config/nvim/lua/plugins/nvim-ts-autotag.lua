@@ -3,5 +3,7 @@ return {
     dependencies = "nvim-treesitter/nvim-treesitter",
     lazy = true,
     event = "VeryLazy",
-    config = true,
+    config = function()
+        require("nvim-ts-autotag").setup({})
+    end,
 }

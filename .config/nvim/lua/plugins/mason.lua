@@ -15,6 +15,7 @@ return {
             ensure_installed = {
                 "lua-language-server",
                 "gopls",
+                "goimports",
                 "basedpyright",
                 "typescript-language-server",
                 "astro-language-server",
@@ -28,6 +29,8 @@ return {
                 "eslint_d",
                 "ruff",
                 "hadolint",
+                "bash-language-server",
+                "shellcheck",
             },
         })
     end,
