@@ -1,17 +1,18 @@
 return {
     "nvim-lualine/lualine.nvim",
     dependencies = {
-        "Mofiqul/dracula.nvim",
         "nvim-tree/nvim-web-devicons",
     },
     opts = {
         options = {
+            globalstatus = true,
             icons_enabled = true,
-            theme = "dracula",
+            theme = "tmrw",
+            section_separators = "",
             component_separators = "|",
         },
         sections = {
-            lualine_b = { { "branch", icon = "" } },
+            lualine_b = { "diff", "diagnostics" },
             lualine_c = {
                 {
                     "filename",
