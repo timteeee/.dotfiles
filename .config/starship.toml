@@ -4,7 +4,10 @@
 vicmd_symbol = "[](green)"
 
 [git_branch]
-symbol = " "
+disabled = true
+
+[git_status]
+disabled = true
 
 [package]
 disabled = true
@@ -14,9 +17,6 @@ disabled = true
 
 [docker_context]
 disabled = true
-
-[helm]
-symbol = "󰠳 "
 
 [rust]
 symbol = " "
@@ -37,7 +37,7 @@ symbol = " "
 style = "bold #51a0cf"
 
 [nodejs]
-detect_files = ["package.json", ".node-version", "!bun.lockb", "!bunfig.toml"]
+detect_files = ["package.json", ".node-version", "!bun.lock", "!bun.lockb", "!bunfig.toml"]
 
 [bun]
-detect_files = ["bun.lockb", "bunfig.toml", "!package-lock.json"]
+detect_files = ["bun.lock", "bun.lockb", "bunfig.toml", "!package-lock.json"]
