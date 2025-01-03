@@ -161,7 +161,7 @@ end
 
 ls.add_snippets("go", {
     ls.snippet(
-        "if err",
+        "iferr",
         fmta(
             [[
 if err != nil {
