@@ -7,7 +7,7 @@ return {
         options = {
             globalstatus = true,
             icons_enabled = true,
-            theme = "tmrw",
+            theme = require("colorscheme.lualine.themes.tmrw"),
             section_separators = "",
             component_separators = "|",
         },
