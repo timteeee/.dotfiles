@@ -19,7 +19,7 @@ font-feature = cv10
 # center aligned '*'
 font-feature = cv16  
 
-font-size = 16
+font-size = 15
 
 adjust-cell-width = -5%
 
