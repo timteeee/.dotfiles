@@ -1,6 +1,5 @@
 return {
     "j-hui/fidget.nvim",
-    tag = "v1.4.0",
     opts = {
         progress = {
             -- How to get a progress message's notification group key
