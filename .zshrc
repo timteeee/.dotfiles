@@ -96,7 +96,5 @@ export _ZO_DATA_DIR="$HOME/.local/share"
 export _ZO_RESOLVE_SYMLINKS=1
 export _ZO_FZF_OPTS="$FZF_DEFAULT_OPTS"
 
-eval "$(pyenv init --path)"
-
 eval "$(zoxide init zsh --cmd cd)"
 eval "$(starship init zsh)"
