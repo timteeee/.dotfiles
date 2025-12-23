@@ -1,10 +1,9 @@
 return {
-    "nvim-treesitter/nvim-treesitter",
-    dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
-    build = ":TSUpdate",
-    config = function()
-        require("nvim-treesitter.configs").setup({
-            ensure_installed = {
+    {
+        "nvim-treesitter/nvim-treesitter",
+        build = ":TSUpdate",
+        init = function()
+            local ensure_installed = {
                 "javascript",
                 "typescript",
                 "tsx",
@@ -19,73 +18,51 @@ return {
                 "python",
                 "rust",
                 "zig",
-                "gleam",
                 "go",
                 "templ",
                 "sql",
                 "dockerfile",
                 "vimdoc",
                 "vim",
-            },
-            auto_install = false,
-            highlight = { enable = true },
-            indent = { enable = false },
-            incremental_selection = {
-                enable = true,
-                keymaps = {
-                    init_selection = "<c-space>",
-                    node_incremental = "<c-space>",
-                    scope_incremental = "<c-s>",
-                    node_decremental = "<M-space>",
-                },
-            },
-            textobjects = {
-                select = {
-                    enable = true,
-                    lookahead = true,
-                    keymaps = {
-                        ["aa"] = "@parameter.outer",
-                        ["ia"] = "@parameter.inner",
-                        ["af"] = "@function.outer",
-                        ["if"] = "@function.inner",
-                        ["ac"] = "@class.outer",
-                        ["ic"] = "@class.inner",
-                    },
-                },
-                move = {
-                    enable = true,
-                    set_jumps = true,
-                    goto_next_start = {
-                        ["]m"] = "@function.outer",
-                        ["]]"] = "@class.outer",
-                    },
-                    goto_next_end = {
-                        ["]M"] = "@function.outer",
-                        ["]["] = "@class.outer",
-                    },
-                    goto_previous_start = {
-                        ["[m"] = "@function.outer",
-                        ["[["] = "@class.outer",
-                    },
-                    goto_previous_end = {
-                        ["[M"] = "@function.outer",
-                        ["[]"] = "@class.outer",
-                    },
-                },
-                swap = {
-                    enable = true,
-                    swap_next = {
-                        ["<leader>a"] = "@parameter.inner",
-                    },
-                    swap_previous = {
-                        ["<leader>A"] = "@parameter.inner",
-                    },
-                },
-            },
-        })
+            }
 
-        -- Diagnostic keymaps
-        vim.keymap.set("n", "<C-e>", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
-        vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
-    end,
+            local already_installed = require("nvim-treesitter.config").get_installed()
+            local parsers_to_install = vim.iter(ensure_installed)
+                :filter(function(parser)
+                    return not vim.tbl_contains(already_installed, parser)
+                end)
+                :totable()
+            require("nvim-treesitter").install(parsers_to_install)
+        end,
+    },
+    {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        branch = "main",
+        config = function()
+            require("nvim-treesitter-textobjects").setup({
+                select = {
+                    lookahead = true,
+                    lookbehind = true,
+                    selection_modes = {
+                        ["@function.outer"] = "V",
+                        ["@class.outer"] = "V",
+                    },
+                    include_surrounding_whitespace = false,
+                },
+            })
+
+            vim.keymap.set({ "x", "o" }, "af", function()
+                require("nvim-treesitter-textobjects.select").select_textobject("@function.outer")
+            end)
+            vim.keymap.set({ "x", "o" }, "if", function()
+                require("nvim-treesitter-textobjects.select").select_textobject("@function.inner")
+            end)
+            vim.keymap.set({ "x", "o" }, "ac", function()
+                require("nvim-treesitter-textobjects.select").select_textobject("@class.outer")
+            end)
+            vim.keymap.set({ "x", "o" }, "ic", function()
+                require("nvim-treesitter-textobjects.select").select_textobject("@class.inner")
+            end)
+        end,
+    },
 }
