@@ -9,9 +9,6 @@ vim.opt.softtabstop = 4
 -- Remove statusline and hide command line when not in use
 vim.opt.laststatus = 0
 
--- Disable current mode being shown in command line
-vim.opt.showmode = false
-
 -- Enable break indent
 vim.opt.breakindent = true
 vim.opt.smartindent = true
@@ -49,6 +46,9 @@ vim.opt.completeopt = "menuone,noselect"
 
 -- NOTE: You should make sure your terminal supports this
 vim.opt.termguicolors = true
+
+-- Change tildes at end of file into spaces
+vim.opt.fillchars = { eob = " " }
 
 -- Enable mouse mode
 vim.opt.mouse = "a"
