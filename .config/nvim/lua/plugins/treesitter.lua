@@ -4,6 +4,7 @@ return {
         build = ":TSUpdate",
         init = function()
             local ensure_installed = {
+                "markdown",
                 "javascript",
                 "typescript",
                 "tsx",
@@ -24,6 +25,7 @@ return {
                 "dockerfile",
                 "vimdoc",
                 "vim",
+                "just",
             }
 
             local already_installed = require("nvim-treesitter.config").get_installed()
@@ -32,7 +34,28 @@ return {
                     return not vim.tbl_contains(already_installed, parser)
                 end)
                 :totable()
-            require("nvim-treesitter").install(parsers_to_install)
+
+            local ts = require("nvim-treesitter")
+            ts.install(parsers_to_install)
+
+            vim.api.nvim_create_autocmd("FileType", {
+                callback = function(args)
+                    local lang = vim.treesitter.language.get_lang(args.match)
+                    if not lang then
+                        return
+                    end
+
+                    if vim.list_contains(ts.get_available(), lang) then
+                        if not vim.list_contains(ts.get_installed(), lang) then
+                            vim.notify_once("[nvim-treesitter] Treesitter parser for `" .. lang .. "` is available but not installed", vim.log.levels.INFO)
+                            return
+                        end
+
+                        vim.treesitter.start(args.buf)
+                    end
+                end,
+                desc = "Enable nvim-treesitter and install parser if not installed",
+            })
         end,
     },
     {
