@@ -6,9 +6,6 @@ vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 
--- Remove statusline and hide command line when not in use
-vim.opt.laststatus = 0
-
 -- Enable break indent
 vim.opt.breakindent = true
 vim.opt.smartindent = true
@@ -96,17 +93,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.keymap.set("n", "gH", function()
             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
         end, { desc = "Toggle LSP Inlay Hints" })
-    end,
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-    desc = "Enable Treesitter highlighting",
-    group = vim.api.nvim_create_augroup("TreesitterGroup", { clear = true }),
-    callback = function(_)
-        local _ = pcall(vim.treesitter.start)
-        -- if not _ then
-        --     vim.notify("Missing treesitter parser for " .. vim.bo.filetype)
-        -- end
     end,
 })
 

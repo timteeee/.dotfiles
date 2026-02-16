@@ -29,7 +29,10 @@ return {
         },
 
         -- (Default) Only show the documentation popup when manually triggered
-        completion = { documentation = { auto_show = false } },
+        completion = {
+            documentation = { auto_show = true },
+            accept = { auto_brackets = { enabled = false } },
+        },
         sources = {
             default = { "lazydev", "lsp", "path", "snippets", "buffer" },
             providers = {

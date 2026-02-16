@@ -9,17 +9,12 @@ return {
             icons_enabled = true,
             theme = require("colorscheme.lualine.themes.tmrw"),
             section_separators = "",
-            component_separators = "|",
+            component_separators = "",
         },
         sections = {
-            lualine_b = { "diff", "diagnostics" },
-            lualine_c = {
-                {
-                    "filename",
-                    path = 1, -- relative from the directory nvim was opened in
-                },
-            },
-            lualine_x = {},
+            lualine_b = { { "branch", icon = "" } },
+            lualine_c = { { "filename", path = 1 } }, -- relative from the directory nvim was opened in
+            lualine_x = { "diagnostics" },
             lualine_y = { "filetype" },
         },
     },

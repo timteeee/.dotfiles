@@ -41,3 +41,5 @@ require("lazy").setup("plugins", {
         border = "rounded",
     },
 })
+
+require("colorscheme.tmrw").load()

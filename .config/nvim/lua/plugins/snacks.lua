@@ -1,8 +1,10 @@
 return {
     "folke/snacks.nvim",
+    lazy = false,
     ---@module "snacks"
     ---@type snacks.Config
     opts = {
+        picker = {},
         indent = {
             indent = { char = "┊" },
             scope = { char = "┊", only_current = true },
@@ -36,12 +38,10 @@ return {
        ^00                '0%%%%'                                                                            
          '                  ^''                                                                              ]],
                 keys = {
-                    { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-                    { icon = "󰭎 ", key = "f", desc = "Find File", action = ":Telescope find_files" },
-                    { icon = " ", key = "r", desc = "Recent Files", action = ":Telescope oldfiles" },
-                    { icon = " ", key = "g", desc = "Find Text", action = ":Telescope live_grep" },
+                    { icon = " ", key = "m", desc = "Mason", action = ":Mason", enabled = package.loaded.lazy ~= nil },
+                    { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
+                    { icon = " ", key = "h", desc = "Health", action = ":checkhealth" },
                     { icon = " ", key = "c", desc = "Config", action = ":cd $DOTFILES/.config/nvim | :e ." },
-                    { icon = "󰒲 ", key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
                     { icon = " ", key = "q", desc = "Quit", action = ":qa" },
                 },
             },
@@ -50,6 +50,45 @@ return {
                 { section = "keys", gap = 1, padding = 1 },
                 { section = "startup", padding = 1 },
             },
+        },
+    },
+
+    keys = {
+        {
+            "sd",
+            function()
+                Snacks.picker.diagnostics()
+            end,
+            desc = "Buffer Diagnostics",
+        },
+        {
+            "sh",
+            function()
+                Snacks.picker.help()
+            end,
+            desc = "Help Pages",
+        },
+        {
+            "sH",
+            function()
+                Snacks.picker.highlights()
+            end,
+            desc = "Highlights",
+        },
+        -- Need to define this keybind twice because tmux doesn't support Kitty Keyboard Protocol
+        {
+            "<C-/>",
+            function()
+                Snacks.picker.lines({ layout = { preset = "vertical" } })
+            end,
+            desc = "Search lines in current buffer",
+        },
+        {
+            "<C-_>",
+            function()
+                Snacks.picker.lines({ layout = { preset = "vertical" } })
+            end,
+            desc = "Search lines in current buffer",
         },
     },
 }

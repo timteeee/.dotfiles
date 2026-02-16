@@ -18,11 +18,18 @@ return {
     lazy = false,
     keys = {
         {
-            "sf", -- try it if you didn't it is a banger keybinding for a picker
+            "sf",
             function()
                 require("fff").find_files()
             end,
             desc = "FFFind files",
+        },
+        {
+            "sg",
+            function()
+                require("fff").live_grep()
+            end,
+            desc = "FFFind live grep",
         },
     },
 }

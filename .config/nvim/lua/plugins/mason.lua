@@ -16,7 +16,7 @@ return {
             "astro",
             "html",
             "tailwindcss",
-            "dockerls",
+            "docker_language_server",
             "bashls",
         }
 
