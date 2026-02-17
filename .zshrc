@@ -1,57 +1,77 @@
-# History
-HISTSIZE=5000
-HISTFILE=~/.zsh_history
+# ── History ──────────────────────────────────────────────────────────
+# Shared across sessions, deduped, and large enough to make fzf
+# history search (Ctrl+R) useful over long periods.
+HISTSIZE=50000
 SAVEHIST=$HISTSIZE
-HISTDUP=erase
+HISTFILE=~/.zsh_history
 
 setopt appendhistory
 setopt sharehistory
 setopt hist_ignore_space
 setopt hist_ignore_all_dups
 setopt hist_save_no_dups
-setopt hist_ignore_dups
 setopt hist_find_no_dups
 
-# Keybinds
-bindkey -e
-bindkey "^p" history-search-backward
-bindkey "^n" history-search-forward
+# ── Completions ──────────────────────────────────────────────────────
+# compinit scans every directory in fpath for completion files on each
+# shell launch, which is expensive. The scan results are cached in
+# ~/.zcompdump. This check compares the current day (Julian) against
+# the dump file's last-modified day — if they match, we skip the full
+# scan and load the cached dump directly with -C. The dump is
+# regenerated at most once per day, or when you delete ~/.zcompdump.
+autoload -U compinit
+zmodload zsh/stat
+if [[ -f ~/.zcompdump && $(date +'%j') == $(zstat +mtime -F '%j' ~/.zcompdump) ]]; then
+    compinit -C
+else
+    compinit
+fi
 
-# Completions
-autoload -U compinit; compinit
-
+# Case-insensitive matching, colored results, and fzf-tab preview.
+# zstyle declarations take effect whenever the completion system or 
+# fzf-tab reads them, so order doesn't matter.
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
 zstyle ':fzf-tab:complete:cd:*' fzf --preview 'ls --color $realpath'
 
-# Variables
-export PLUGINDIR=$HOME/.zsh/plugins
-export DEV=$HOME/Developer
-export CONFIG=$HOME/.config
-export DOTFILES=$HOME/.dotfiles
-export VOLTA_HOME="$HOME/.volta"
-export GOPATH="$HOME/go"
-export PATH="$GOPATH/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
-
-# Aliases
+# ── Aliases ──────────────────────────────────────────────────────────
 alias ls="ls --color"
 
-# Plugins
-source $PLUGINDIR/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-source $PLUGINDIR/fzf-tab/fzf-tab.plugin.zsh
-source $PLUGINDIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source $PLUGINDIR/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# Zsh Vim Mode settings
+# ── ZVM (Zsh Vi Mode) ───────────────────────────────────────────────-
+# All ZVM config and hooks must be defined BEFORE sourcing the plugin.
+#
+# ZVM_INIT_MODE=sourcing makes ZVM initialize synchronously during
+# `source`, not lazily on first keystroke. This ensures zvm_after_init
+# fires immediately, which is critical for keybinds surviving
+# `source ~/.zshrc` during development.
 export ZVM_VI_HIGHLIGHT_FOREGROUND=default
 export ZVM_VI_HIGHLIGHT_BACKGROUND="#373b41"
+export ZVM_INIT_MODE=sourcing
 
-# FZF settings
-zvm_after_init_commands+=('eval "$(fzf --zsh)"')
+# ZVM clobbers all keybinds on init, so anything that needs to survive
+# (fzf shell integration, custom keybinds) must be re-applied here.
+function zvm_after_init() {
+    eval "$(fzf --zsh)"
+    bindkey "^p" history-search-backward
+    bindkey "^n" history-search-forward
+}
 
-export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
+# ── Plugins ──────────────────────────────────────────────────────────
+# Order matters:
+#   1. zsh-vi-mode first (takes over keymap; zvm_after_init fires here)
+#   2. fzf-tab (overrides default completion menu with fzf)
+#   3. zsh-syntax-highlighting (must come before autosuggestions so
+#      suggestions don't get syntax-highlighted incorrectly)
+#   4. zsh-autosuggestions last
+PLUGINDIR="$HOME/.zsh/plugins"
+source "$PLUGINDIR/zsh-vi-mode/zsh-vi-mode.plugin.zsh"
+source "$PLUGINDIR/fzf-tab/fzf-tab.plugin.zsh"
+source "$PLUGINDIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+source "$PLUGINDIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
+
+# ── FZF Settings ─────────────────────────────────────────────────────
+export FZF_DEFAULT_OPTS=" \
     --highlight-line \
     --info=inline-right \
     --ansi \
@@ -75,14 +95,6 @@ export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
     --color=spinner:#b294bb \
 "
 
-export FZF_COMPLETION_TRIGGER="**" # **<TAB> to trigger completions
-export FZF_COMPLETION_OPTS="$FZF_DEFAULT_OPTS \
-    --info=inline \
-    --no-scrollbar \
-"
-
-export FZF_TMUX_OPTS="$FZF_DEFAULT_OPTS"
-
 export FZF_CTRL_R_OPTS="
     --preview 'echo {}' --preview-window up:3:hidden:wrap
     --bind 'ctrl-/:toggle-preview'
@@ -91,10 +103,20 @@ export FZF_CTRL_R_OPTS="
     --no-scrollbar
 "
 
-# Zoxide settings
+# ── Zoxide Settings ─────────────────────────────────────────────────
+# Must be set before `zoxide init` below.
+# Inherits FZF_DEFAULT_OPTS so zoxide's interactive selection matches
+# the rest of the fzf theme.
 export _ZO_DATA_DIR="$HOME/.local/share"
 export _ZO_RESOLVE_SYMLINKS=1
 export _ZO_FZF_OPTS="$FZF_DEFAULT_OPTS"
 
+# ── Tool Initialization ─────────────────────────────────────────────
+# fnm: per-shell Node version management. Uses a unique multishell
+# path per session, so this MUST run in every shell (not .zprofile).
+eval "$(fnm env --use-on-cd)"
+
 eval "$(zoxide init zsh --cmd cd)"
+
+# Starship prompt — must be last so it can wrap any existing hooks.
 eval "$(starship init zsh)"
