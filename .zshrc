@@ -38,6 +38,9 @@ zstyle ':fzf-tab:complete:cd:*' fzf --preview 'ls --color $realpath'
 # ── Aliases ──────────────────────────────────────────────────────────
 alias ls="ls --color"
 
+# ── Local Config ─────────────────────────────────────────────────────
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+
 # ── ZVM (Zsh Vi Mode) ───────────────────────────────────────────────-
 # All ZVM config and hooks must be defined BEFORE sourcing the plugin.
 #

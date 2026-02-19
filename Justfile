@@ -52,7 +52,7 @@ sync branch:
     echo "✓ Synced"
 
 # Preview upstream changes before syncing
-sync-preview:
+preview-sync:
     #!/usr/bin/env bash
 
     set -euo pipefail
