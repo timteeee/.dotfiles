@@ -70,6 +70,15 @@
       "git bisect *": "allow",
       "git checkout *": "allow",
 
+      // --- gh read-only commands ---
+      "gh * view": "allow",
+      "gh * list": "allow",
+      "gh * status": "allow",
+      "gh * search": "allow",
+
+      // --- just  ---
+      "just *": "allow",
+
       // --- traps: dangerous forms of allowed commands (last-match wins) ---
       "* | sh*": "ask",
       "* | bash*": "ask",
