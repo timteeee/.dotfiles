@@ -38,6 +38,7 @@ return {
        ^00                '0%%%%'                                                                            
          '                  ^''                                                                              ]],
                 keys = {
+                    { icon = " ", key = "g", desc = "Git", action = ":Git", enabled = package.loaded.lazy ~= nil },
                     { icon = " ", key = "m", desc = "Mason", action = ":Mason", enabled = package.loaded.lazy ~= nil },
                     { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
                     { icon = " ", key = "h", desc = "Health", action = ":checkhealth" },
