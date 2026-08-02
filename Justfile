@@ -29,6 +29,28 @@ adopt:
 diff:
     @git diff
 
+# Validate opencode config against its published schema
+validate-opencode:
+    sed '/^[[:space:]]*\/\//d' .config/opencode/opencode.jsonc | uvx check-jsonschema --schemafile https://opencode.ai/config.json -
+
+# Check shell syntax
+validate-shell:
+    #!/usr/bin/env bash
+
+    set -euo pipefail
+
+    for f in .zshrc .zprofile .zshenv; do
+        zsh -n "$f"
+    done
+
+# Dry-run stow against a clean target
+validate-stow:
+    stow -t "$(mktemp -d)" --no --verbose .
+
+# Run all validation checks
+validate: validate-opencode validate-shell validate-stow
+    @echo "✓ validate passed"
+
 # Sync fork with upstream and rebase local branch
 sync branch:
     #!/usr/bin/env bash
