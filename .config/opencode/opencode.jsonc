@@ -1,0 +1,95 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "bash": {
+      // Default: anything not explicitly listed below prompts for approval.
+      // Grow this allowlist over time; prefer read-only commands.
+      "*": "ask",
+
+      // --- inspection ---
+      "ls *": "allow",
+      "stat *": "allow",
+      "file *": "allow",
+      "wc *": "allow",
+      "pwd *": "allow",
+      "dirname *": "allow",
+      "basename *": "allow",
+      "which *": "allow",
+      "cd *": "allow",
+
+      // --- reading files ---
+      "cat *": "allow",
+      "head *": "allow",
+      "tail *": "allow",
+      "less *": "allow",
+      "more *": "allow",
+      "bat *": "allow",
+
+      // --- searching ---
+      "grep *": "allow",
+      "rg *": "allow",
+      "find *": "allow",
+      "fd *": "allow",
+
+      // --- text transforms (stdout only) ---
+      "sort *": "allow",
+      "uniq *": "allow",
+      "cut *": "allow",
+      "tr *": "allow",
+      "diff *": "allow",
+      "cmp *": "allow",
+      "jq *": "allow",
+      "sed *": "allow",
+
+      // --- git (intentionally allowed commands) ---
+      "git status *": "allow",
+      "git log *": "allow",
+      "git diff *": "allow",
+      "git show *": "allow",
+      "git blame *": "allow",
+      "git reflog *": "allow",
+      "git rev-parse *": "allow",
+      "git describe *": "allow",
+      "git ls-files *": "allow",
+      "git ls-tree *": "allow",
+      "git ls-remote *": "allow",
+      "git shortlog *": "allow",
+      "git merge-base *": "allow",
+      "git branch": "allow",
+      "git branch -a *": "allow",
+      "git branch -r *": "allow",
+      "git branch -vv *": "allow",
+      "git branch --list *": "allow",
+      "git branch --show-current *": "allow",
+      "git remote": "allow",
+      "git remote -v *": "allow",
+      "git config --list *": "allow",
+      "git config * --list*": "allow",
+      "git help *": "allow",
+      "git version": "allow",
+      "git bisect *": "allow",
+      "git checkout *": "allow",
+
+      // --- traps: dangerous forms of allowed commands (last-match wins) ---
+      "* | sh*": "ask",
+      "* | bash*": "ask",
+      "* | zsh*": "ask",
+      "* | fish*": "ask",
+      "* | dash*": "ask",
+      "find * -delete*": "ask",
+      "find * -exec*": "ask",
+      "find * -ok*": "ask",
+      "fd * --exec*": "ask",
+      "sed -i *": "ask",
+      "git bisect run *": "ask"
+    },
+    "external_directory": {
+      // Default: anything outside the workspace prompts.
+      "*": "ask",
+      // $DEV — all dev projects
+      "~/Developer/**": "allow",
+      // $DOTFILES — the dotfiles repo
+      "~/.dotfiles/**": "allow"
+    }
+  }
+}
