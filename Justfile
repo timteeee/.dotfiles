@@ -23,11 +23,6 @@ relink:
 # Adopt existing files into repo
 adopt:
     stow -t {{ home }} --adopt .
-    @echo "⚠ Review changes: just diff"
-
-# Show uncommitted changes
-diff:
-    @git diff
 
 # Validate opencode config against its published schema
 validate-opencode:
@@ -56,7 +51,14 @@ sync branch:
     #!/usr/bin/env bash
 
     set -euo pipefail
-	
+
+    if ! git remote get-url upstream >/dev/null 2>&1; then
+        echo "sync is for forks with an upstream remote configured to https://github.com/timteeee/.dotfiles." >&2
+        echo "On a machine that only uses origin, pull from origin instead:" >&2
+        echo "  git pull --ff-only origin main" >&2
+        exit 1
+    fi
+
     current=$(git branch --show-current)
 
     git fetch upstream
@@ -78,6 +80,13 @@ preview-sync:
     #!/usr/bin/env bash
 
     set -euo pipefail
+
+    if ! git remote get-url upstream >/dev/null 2>&1; then
+        echo "preview-sync is for forks with an upstream remote configured to https://github.com/timteeee/.dotfiles." >&2
+        echo "On a machine that only uses origin, fetch origin instead:" >&2
+        echo "  git fetch origin && git log --oneline main..origin/main" >&2
+        exit 1
+    fi
 
     git fetch upstream
     git log --oneline main..upstream/main
