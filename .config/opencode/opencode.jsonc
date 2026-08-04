@@ -16,6 +16,8 @@
       "basename *": "allow",
       "which *": "allow",
       "cd *": "allow",
+      "readlink *": "allow",
+      "echo *": "allow",
 
       // --- reading files ---
       "cat *": "allow",
@@ -78,6 +80,10 @@
 
       // --- just  ---
       "just *": "allow",
+
+      // --- hunk ---
+      "hunk skill path": "allow",
+      "hunk session *": "allow",
 
       // --- traps: dangerous forms of allowed commands (last-match wins) ---
       "* | sh*": "ask",
