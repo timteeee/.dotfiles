@@ -1,56 +1,36 @@
-### 1. Plan Mode Default
+## Terminology
 
-- Enter plan mode for ANY non-trivial task (3+ steps or architectural decisions)
-- If something goes sideways, STOP and re-plan immediately – don't keep pushing
-- Use plan mode for verification steps, not just building
-- Write detailed specs upfront to reduce ambiguity
+Use these terms exactly. Consistent, shared language is the whole point.
 
-### 2. Subagent Strategy
+- Simple: how cleanly the logic breaks down. each step follows from the last, no step doing two jobs.
+- Obvious: the next reader never asks "why is this here?". measured by the reader. not always simple; sometimes obvious has more parts.
+- Landmine - a decision that costs nothing now and blows up later. by the time it detonates it's load-bearing. (i.e. an unmeasured limit, a silent catch)
+- Alignment - you and the user have the exact same goal
 
-- Use subagents liberally to keep main context window clean
-- Offload research, exploration, and parallel analysis to subagents
-- For complex problems, throw more compute at it via subagents
-- One task per subagent for focused execution
+### Alignment before action
 
-### 3. Self-Improvement Loop
+Always ensure alignment with the user on what they want. For more involved tasks, grill them. For smaller tasks, a question to confirm alignment is sufficient.
 
-- After ANY correction from the user: update `tasks/lessons.md` with the pattern
-- Write rules for yourself that prevent the same mistake
-- Ruthlessly iterate on these lessons until mistake rate drops
-- Review lessons at session start for relevant project
+### Delegate proactively
 
-### 4. Verification Before Done
+Use subagents liberally to keep context clean. Summarize relevant details and surface any references the subagent provided. The goal should be that all the
+relevant details from subagents are part of the main thread's context, but all of the irrelevant details are left behind. You should not have to start a new
+subagent if the user has a follow-up question.
 
-- Never mark a task complete without proving it works
-- Diff behavior between main and your changes when relevant
-- Ask yourself: "Would a staff engineer approve this?"
-- Run tests, check logs, demonstrate correctness
+### Fight for the obvious solution
 
-### 5. Demand Elegance (Balanced)
+Measure twice, cut once: understand the problem fully before building, because cleverness is what gets written when you haven't.
+The biggest simplicity win is refusing to solve problems we don't have.
 
-- For non-trivial changes: pause and ask "is there a more elegant way?"
-- If a fix feels hacky: "Knowing everything I know now, implement the elegant solution"
-- Skip this for simple, obvious fixes – don't over-engineer
-- Challenge your own work before presenting it
+### Testing
 
-### 6. Autonomous Bug Fixing
+Tests should test exactly one thing. Each test must inlcude an accompanying docstring explaining what is and isn't being tested,
+and should convey why it's a valuable test. If the justification is poor, don't write the test. Design code such that obvious tests are the easy path.
 
-- When given a bug report: just fix it. Don't ask for hand-holding
-- Point at logs, errors, failing tests – then resolve them
-- Zero context switching required from the user
-- Go fix failing CI tests without being told how
+### Verify before done
 
-## Task Management
+Run tests/checks, demonstrate correctness. Not every test needs to be part of the codebase, but you should prove to correctness to the user.
 
-1. **Plan First:** Write plan to `tasks/todo.md` with checkable items
-2. **Verify Plan:** Check in before starting implementation
-3. **Track Progress:** Mark items complete as you go
-4. **Explain Changes:** High-level summary at each step
-5. **Document Results:** Add review section to `tasks/todo.md`
-6. **Capture Lessons:** Update `tasks/lessons.md` after corrections
+### Get to the root of the problem
 
-## Core Principles
-
-- **Simplicity First:** Make every change as simple as possible. Impact minimal code.
-- **No Laziness:** Find root causes. No temporary fixes. Senior developer standards.
-- **Minimal Impact:** Changes should only touch what's necessary. Avoid introducing bugs.
+No lazy solutions: find root causes. Minimal-impact changes. Prefer the simplest change; for non-trivial work, implement the elegant solution, not the hacky one.
